@@ -1,0 +1,23 @@
+{
+  "name": "omerkocaoglu/opskins-trade-service",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Omer Kocaoglu",
+      "email": "okocaoglu05@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "OmerKocaoglu\\OPSkinsTradeService\\": "src"
+    }
+  },
+  "require": {
+    "fabs/serialize": "dev-develop",
+    "guzzlehttp/guzzle": "^6.3",
+    "fabstract/validator": "^0.4.11",
+    "fabstract/serializer": "^0.2.2",
+    "fabstract/rest": "^0.10.2"
+  }
+}
