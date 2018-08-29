@@ -3,8 +3,10 @@
 namespace OmerKocaoglu\OPSkinsTradeService\Services;
 
 use Fabstract\Component\Assert\Assert;
+use Fabstract\Component\Serializer\Normalizer\Type;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsTradeInterfaces;
 use OmerKocaoglu\OPSkinsTradeService\Model\TradeUrl\TradeUrlModel;
+use OmerKocaoglu\OPSkinsTradeService\Model\TradeUrl\TradeUrlResponseModel;
 
 class TradeUrlService extends ServiceBase
 {
@@ -32,7 +34,7 @@ class TradeUrlService extends ServiceBase
             $this->api_key);
         $content = $this->getClient()->get($url)->getBody()->getContents();
         /** @var TradeUrlModel $trade_url_model */
-        $trade_url_model = $this->serializer->deserialize($content, new Type(TradeUrlModel::class));
+        $trade_url_model = $this->serializer->deserialize($content, new Type(TradeUrlResponseModel::class));
         return $trade_url_model;
     }
 }
