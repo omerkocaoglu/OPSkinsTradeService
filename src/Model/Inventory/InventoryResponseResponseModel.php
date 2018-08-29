@@ -2,18 +2,17 @@
 
 namespace OmerKocaoglu\OPSkinsTradeService\Model\Inventory;
 
+use Fabstract\Component\Serializer\Normalizer\ArrayType;
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
-use Fabstract\Component\Serializer\Normalizer\Type;
+use OmerKocaoglu\OPSkinsTradeService\Model\Item\StandardItemModel;
 
-class InventoryResponseModel implements NormalizableInterface
+class InventoryResponseResponseModel implements NormalizableInterface
 {
+    /** @var StandardItemModel[] */
+    public $items = [];
     /** @var int */
-    public $status = 0;
-    /** @var int */
-    public $time = 0;
-    /** @var InventoryResponseResponseModel */
-    public $response = null;
+    public $total = 0;
 
     /**
      * @param NormalizationMetadata $normalization_metadata
@@ -21,7 +20,6 @@ class InventoryResponseModel implements NormalizableInterface
      */
     public function configureNormalizationMetadata($normalization_metadata)
     {
-        $normalization_metadata
-            ->registerType('response', new Type(InventoryResponseResponseModel::class));
+        $normalization_metadata->registerType('items', new ArrayType(StandardItemModel::class));
     }
 }
