@@ -15,11 +15,11 @@ class UserInventoryService extends ServiceBase
     /** @var int */
     private $app_id = 1; //default value's defined as 1 since vgo's internal app id's 1...
     /** @var int */
-    private $page = 1; //default value's defined as 1 since default page value's 1...
+    private $page = 0;
     /** @var int */
-    private $per_page = 10;
+    private $per_page = 0;
     /** @var int */
-    private $sort = 2; //default value's defined 2 since for ascending sorting by name is defined 2 by opskins...
+    private $sort = 0;
 
     /**
      * @param string $trade_url
@@ -49,7 +49,10 @@ class UserInventoryService extends ServiceBase
      */
     public function setPage($page)
     {
-        Assert::isPositive($page);
+        Assert::isInt($page);
+        Assert::isNotNegative($page);
+        Assert::isNotEqualTo($page, 0);
+
         $this->page = $page;
         return $this;
     }
@@ -60,7 +63,10 @@ class UserInventoryService extends ServiceBase
      */
     public function setPerPage($per_page)
     {
-        Assert::isPositive($per_page);
+        Assert::isInt($per_page);
+        Assert::isNotNegative($per_page);
+        Assert::isNotEqualTo($per_page, 0);
+
         $this->per_page = $per_page;
         return $this;
     }
@@ -116,44 +122,24 @@ class UserInventoryService extends ServiceBase
         Assert::isPositive(intval($uid));
 
         $url = sprintf(OPSkinsTradeInterfaces::GET_INVENTORY, $uid, $this->app_id);
-        $url = $this->addPageToUrl($url);
-        $url = $this->addPerPageToUrl($url);
-        $url = $this->addSort($url);
+
+        if ($this->page !== 0) {
+            $url = $this->addPageToUrl($url, $this->page);
+        }
+
+        if ($this->per_page !== 0) {
+            $url = $this->addPerPageToUrl($url, $this->per_page);
+        }
+
+        if ($this->sort !== 0) {
+            $url = $this->addInventorySortToUrl($url, $this->sort);
+        }
+
         $content = $this->getClient()->get($url)->getBody()->getContents();
         /** @var InventoryResponseModel $inventory_response_model */
         $inventory_response_model = $this
             ->serializer
             ->deserialize($content, new Type(InventoryResponseModel::class));
         return $inventory_response_model;
-    }
-
-    /**
-     * @param string $url
-     * @return string
-     */
-    private function addPageToUrl($url)
-    {
-        $url .= ('&page=' . $this->page);
-        return $url;
-    }
-
-    /**
-     * @param string $url
-     * @return string
-     */
-    private function addPerPageToUrl($url)
-    {
-        $url .= ('&per_page=' . $this->per_page);
-        return $url;
-    }
-
-    /**
-     * @param string $url
-     * @return string
-     */
-    private function addSort($url)
-    {
-        $url .= ('&sort=' . $this->sort);
-        return $url;
     }
 }
