@@ -15,6 +15,8 @@ class ConfigModel implements NormalizableInterface
     public $offer_page_default_value = 0;
     /** @var int */
     public $offer_per_page_default_value = 0;
+    /** @var string */
+    public $api_key = null;
 
     /**
      * @param NormalizationMetadata $normalization_metadata
@@ -22,6 +24,5 @@ class ConfigModel implements NormalizableInterface
      */
     public function configureNormalizationMetadata($normalization_metadata)
     {
-        // TODO: Implement configureNormalizationMetadata() method.
     }
 }

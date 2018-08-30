@@ -16,7 +16,7 @@ use OmerKocaoglu\OPSkinsTradeService\Model\Offer\StandardTradeOfferModel;
 class TradeOfferService extends ServiceBase
 {
     /** @var string */
-    private $api_key = 'a10c27d7173b85889e26e29a8bf91a';
+    private $api_key = null;
     /** @var string */
     private $trade_url = null;
     /** @var int[] */
@@ -206,7 +206,7 @@ class TradeOfferService extends ServiceBase
 
         $url = sprintf(
             OPSkinsTradeInterfaces::SEND_OFFER,
-            $this->api_key,
+            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key,
             $this->trade_url,
             $this->two_fa_code,
             implode($this->item_id_list, ','));
@@ -228,7 +228,10 @@ class TradeOfferService extends ServiceBase
         Assert::isNotNegative($offer_id);
         Assert::isNotEqualTo($offer_id, 0);
 
-        $url = sprintf(OPSkinsTradeInterfaces::GET_OFFER, $this->api_key, $offer_id);
+        $url = sprintf(
+            OPSkinsTradeInterfaces::GET_OFFER,
+            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key,
+            $offer_id);
         $content = $this->getClient()->get($url)->getBody()->getContents();
         /** @var StandardTradeOfferModel $offer_model */
         $offer_model = $this->serializer->deserialize($content, new Type(StandardTradeOfferModel::class));
@@ -240,7 +243,9 @@ class TradeOfferService extends ServiceBase
      */
     public function getOffers()
     {
-        $url = sprintf(OPSkinsTradeInterfaces::GET_OFFERS, $this->api_key);
+        $url = sprintf(
+            OPSkinsTradeInterfaces::GET_OFFERS,
+            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
         if ($this->user_id !== 0) {
             $url = $this->addUidToUrl($url, $this->user_id);
         }
@@ -281,7 +286,10 @@ class TradeOfferService extends ServiceBase
         Assert::isNotNegative($offer_id);
         Assert::isNotEqualTo($offer_id, 0);
 
-        $url = sprintf(OPSkinsTradeInterfaces::CANCEL_OFFER, $this->api_key, $offer_id);
+        $url = sprintf(
+            OPSkinsTradeInterfaces::CANCEL_OFFER,
+            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key,
+            $offer_id);
         $content = $this->getClient()->post($url)->getBody()->getContents();
         /** @var StandardTradeOfferModel $offer_model */
         $offer_model = $this->serializer->deserialize($content, new Type(StandardTradeOfferModel::class));
@@ -301,7 +309,11 @@ class TradeOfferService extends ServiceBase
         Assert::isNotNegative($this->two_fa_code);
         Assert::isNotEqualTo($this->two_fa_code, 0);
 
-        $url = sprintf(OPSkinsTradeInterfaces::ACCEPT_OFFER, $this->api_key, $offer_id, $this->two_fa_code);
+        $url = sprintf(
+            OPSkinsTradeInterfaces::ACCEPT_OFFER,
+            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key,
+            $offer_id,
+            $this->two_fa_code);
         $content = $this->getClient()->post($url)->getBody()->getContents();
         /** @var AcceptOfferResponseModel $accept_offer_model */
         $accept_offer_model = $this->serializer->deserialize($content, new Type(AcceptOfferResponseModel::class));
