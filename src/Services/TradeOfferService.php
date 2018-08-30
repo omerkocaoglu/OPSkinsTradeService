@@ -18,6 +18,8 @@ class TradeOfferService extends ServiceBase
     private $trade_url = null;
     /** @var int[] */
     private $item_id_list = [];
+    /** @var int */
+    private $two_fa_code = 0;
 
     /**
      * @param string $api_key
@@ -42,6 +44,19 @@ class TradeOfferService extends ServiceBase
     }
 
     /**
+     * @param int $two_fa_code
+     * @return TradeOfferService
+     */
+    public function setTwoFaCode($two_fa_code)
+    {
+        Assert::isInt($two_fa_code);
+        Assert::isNotNegative($two_fa_code);
+
+        $this->two_fa_code = $two_fa_code;
+        return $this;
+    }
+
+    /**
      * @param int[] $item_id_list
      * @return TradeOfferService
      */
@@ -61,6 +76,8 @@ class TradeOfferService extends ServiceBase
      */
     public function sendOffer()
     {
+        Assert::isNotNegative($this->two_fa_code);
+        Assert::isNotEqualTo($this->two_fa_code, 0);
         Assert::isNotNull($this->trade_url);
         Assert::isNotEmptyArray($this->item_id_list);
 
@@ -68,6 +85,7 @@ class TradeOfferService extends ServiceBase
             OPSkinsTradeInterfaces::SEND_OFFER,
             $this->api_key,
             $this->trade_url,
+            $this->two_fa_code,
             implode($this->item_id_list, ','));
         $content = $this->getClient()->post($url)->getBody()->getContents();
         /** @var SendTradeOfferResponseModel $send_trade_offer_response_model */
@@ -83,6 +101,10 @@ class TradeOfferService extends ServiceBase
      */
     public function getOffer($offer_id)
     {
+        Assert::isInt($offer_id);
+        Assert::isNotNegative($offer_id);
+        Assert::isNotEqualTo($offer_id, 0);
+
         $url = sprintf(OPSkinsTradeInterfaces::GET_OFFER, $this->api_key, $offer_id);
         $content = $this->getClient()->get($url)->getBody()->getContents();
         /** @var StandardTradeOfferModel $offer_model */
@@ -108,6 +130,10 @@ class TradeOfferService extends ServiceBase
      */
     public function cancelOffer($offer_id)
     {
+        Assert::isInt($offer_id);
+        Assert::isNotNegative($offer_id);
+        Assert::isNotEqualTo($offer_id, 0);
+
         $url = sprintf(OPSkinsTradeInterfaces::CANCEL_OFFER, $this->api_key, $offer_id);
         $content = $this->getClient()->post($url)->getBody()->getContents();
         /** @var StandardTradeOfferModel $offer_model */
@@ -121,7 +147,14 @@ class TradeOfferService extends ServiceBase
      */
     public function acceptOffer($offer_id)
     {
-        $url = sprintf(OPSkinsTradeInterfaces::ACCEPT_OFFER, $this->api_key, $offer_id);
+        Assert::isInt($offer_id);
+        Assert::isNotNegative($offer_id);
+        Assert::isNotEqualTo($offer_id, 0);
+        Assert::isInt($this->two_fa_code);
+        Assert::isNotNegative($this->two_fa_code);
+        Assert::isNotEqualTo($this->two_fa_code, 0);
+
+        $url = sprintf(OPSkinsTradeInterfaces::ACCEPT_OFFER, $this->api_key, $offer_id, $this->two_fa_code);
         $content = $this->getClient()->post($url)->getBody()->getContents();
         /** @var AcceptOfferResponseModel $accept_offer_model */
         $accept_offer_model = $this->serializer->deserialize($content, new Type(AcceptOfferResponseModel::class));
