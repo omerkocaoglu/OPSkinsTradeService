@@ -15,9 +15,9 @@ class UserInventoryService extends ServiceBase
     /** @var int */
     private $app_id = 1; //default value's defined as 1 since vgo's internal app id's 1...
     /** @var int */
-    private $page = 0;
+    private $page = 1; //min value's specified by opskins as  1...
     /** @var int */
-    private $per_page = 0;
+    private $per_page = 500; // max value's specified by opskins as 500...
     /** @var int */
     private $sort = 0;
 

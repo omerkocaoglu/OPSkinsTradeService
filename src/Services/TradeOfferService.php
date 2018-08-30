@@ -26,9 +26,9 @@ class TradeOfferService extends ServiceBase
     /** @var int */
     private $user_id = 0;
     /** @var int */
-    private $page = 0;
+    private $page = 1; //min value's specified by opskins as  1...
     /** @var int */
-    private $per_page = 0;
+    private $per_page = 100; // max value's specified by opskins as 100...
     /** @var string */
     private $type = null;
     /** @var int */
@@ -110,6 +110,7 @@ class TradeOfferService extends ServiceBase
     {
         Assert::isInt($per_page);
         Assert::isNotNegative($per_page);
+        Assert::isNotEqualTo($per_page, 0);
 
         $this->per_page = $per_page;
         return $this;
