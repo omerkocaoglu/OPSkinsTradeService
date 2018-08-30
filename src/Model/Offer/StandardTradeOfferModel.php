@@ -10,9 +10,9 @@ class StandardTradeOfferModel implements NormalizableInterface
 {
     /** @var int */
     public $id = 0;
-    /** @var StandardTradeOfferSenderAndRecipientModel */
+    /** @var StandardTradeOfferUserModel */
     public $sender = null;
-    /** @var StandardTradeOfferSenderAndRecipientModel */
+    /** @var StandardTradeOfferUserModel */
     public $recipient = null;
     /** @var int */
     public $state = 0;
@@ -40,7 +40,7 @@ class StandardTradeOfferModel implements NormalizableInterface
     public function configureNormalizationMetadata($normalization_metadata)
     {
         $normalization_metadata
-            ->registerType('sender', new Type(StandardTradeOfferSenderAndRecipientModel::class))
-            ->registerType('recipient', new Type(StandardTradeOfferSenderAndRecipientModel::class));
+            ->registerType('sender', new Type(StandardTradeOfferUserModel::class))
+            ->registerType('recipient', new Type(StandardTradeOfferUserModel::class));
     }
 }

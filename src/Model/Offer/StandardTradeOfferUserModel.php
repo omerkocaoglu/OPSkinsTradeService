@@ -7,7 +7,7 @@ use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
 use Fabstract\Component\Serializer\Normalizer\Type;
 use OmerKocaoglu\OPSkinsTradeService\Model\Item\StandardItemModel;
 
-class StandardTradeOfferSenderAndRecipientModel implements NormalizableInterface
+class StandardTradeOfferUserModel implements NormalizableInterface
 {
     /** @var int */
     public $uid = 0;

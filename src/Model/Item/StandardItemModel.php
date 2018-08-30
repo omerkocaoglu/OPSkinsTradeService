@@ -4,6 +4,8 @@ namespace OmerKocaoglu\OPSkinsTradeService\Model\Item;
 
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
+use Fabstract\Component\Serializer\Normalizer\Type;
+use OmerKocaoglu\OPSkinsTradeService\Model\Offer\StandardItemAttributeModel;
 
 class StandardItemModel implements NormalizableInterface
 {
@@ -11,34 +13,18 @@ class StandardItemModel implements NormalizableInterface
     public $id = 0;
     /** @var int */
     public $internal_app_id = 0;
-    /** @var int */
-    public $sku = 0;
-    /** @var float */
-    public $wear = 0.0;
-    /** @var int */
-    public $trade_hold_expires = 0;
-    /** @var null */
+    /** @var string */
     public $name = null;
-    /** @var null */
-    public $category = null;
-    /** @var null */
-    public $rarity = null;
-    /** @var null */
-    public $type = null;
-    /** @var null */
+    /** @var string */
     public $color = null;
-    /** @var array */
-    public $image = [];
+    /** @var string */
+    public $image = null;
     /** @var int */
     public $suggested_price = 0;
-    /** @var array */
-    public $previews_url = [];
-    /** @var null */
-    public $inspect = null;
-    /** @var int */
-    public $pattern_index = 0;
-    /** @var int */
-    public $paint_index = 0;
+    /** @var bool */
+    public $tradable = false;
+    /** @var StandardItemAttributeModel */
+    public $attributes = null;
 
     /**
      * @param NormalizationMetadata $normalization_metadata
@@ -46,5 +32,7 @@ class StandardItemModel implements NormalizableInterface
      */
     public function configureNormalizationMetadata($normalization_metadata)
     {
+        $normalization_metadata
+            ->registerType('attributes', new Type(StandardItemAttributeModel::class));
     }
 }
