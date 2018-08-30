@@ -76,7 +76,7 @@ class UserInventoryService extends ServiceBase
      * @param bool $descending
      * @return UserInventoryService
      */
-    public function sort($inventory_sort_parameter, $descending = false)
+    public function setSort($inventory_sort_parameter, $descending = false)
     {
         Assert::isInArray($inventory_sort_parameter, InventorySortParameters::ALL);
         switch ($inventory_sort_parameter) {
