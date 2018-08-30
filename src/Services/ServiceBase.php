@@ -3,7 +3,9 @@
 namespace OmerKocaoglu\OPSkinsTradeService\Services;
 
 use Fabstract\Component\Http\Injectable;
+use Fabstract\Component\Serializer\Normalizer\Type;
 use GuzzleHttp\Client;
+use OmerKocaoglu\OPSkinsTradeService\Model\Config\ConfigModel;
 
 class ServiceBase extends Injectable implements ServiceAware
 {
@@ -94,5 +96,15 @@ class ServiceBase extends Injectable implements ServiceAware
     {
         $url .= ('&type=' . $type);
         return $url;
+    }
+
+    /**
+     * @return ConfigModel
+     */
+    protected function getServiceConfig()
+    {
+        $config_path = __DIR__ . '../Config/config.json';
+        $config_string = file_get_contents($config_path);
+        return $this->serializer->deserialize($config_string, new Type(ConfigModel::class));
     }
 }

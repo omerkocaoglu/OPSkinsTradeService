@@ -1,0 +1,6 @@
+{
+  "user_inventory_page_default_value": 1,
+  "user_inventory_per_page_default_value": 500,
+  "offer_page_default_value": 1,
+  "offer_per_page_default_value": 100
+}
