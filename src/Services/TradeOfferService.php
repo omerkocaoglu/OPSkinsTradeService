@@ -26,9 +26,9 @@ class TradeOfferService extends ServiceBase
     /** @var int */
     private $user_id = 0;
     /** @var int */
-    private $page = 1; //min value's specified by opskins as  1...
+    private $page = 0;
     /** @var int */
-    private $per_page = 100; // max value's specified by opskins as 100...
+    private $per_page = 0;
     /** @var string */
     private $type = null;
     /** @var int */
