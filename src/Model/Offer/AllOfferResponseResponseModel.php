@@ -6,18 +6,12 @@ use Fabstract\Component\Serializer\Normalizer\ArrayType;
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
 
-class AllOfferResponseModel implements NormalizableInterface
+class AllOfferResponseResponseModel implements NormalizableInterface
 {
+    /** @var StandardTradeOfferModel[] */
+    public $offers = [];
     /** @var int */
-    public $status = 0;
-    /** @var int */
-    public $time = 0;
-    /** @var int */
-    public $current_page = 0;
-    /** @var int */
-    public $total_pages = 0;
-    /** @var AllOfferResponseResponseModel */
-    public $response = null;
+    public $total = 0;
 
     /**
      * @param NormalizationMetadata $normalization_metadata
