@@ -103,7 +103,7 @@ class ServiceBase extends Injectable implements ServiceAware
      */
     protected function getServiceConfig()
     {
-        $config_path = __DIR__ . '../Config/config.json';
+        $config_path = __DIR__ . '/../Config/config.json';
         $config_string = file_get_contents($config_path);
         return $this->serializer->deserialize($config_string, new Type(ConfigModel::class));
     }
