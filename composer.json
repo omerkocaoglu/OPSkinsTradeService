@@ -16,8 +16,6 @@
   "require": {
     "fabs/serialize": "dev-develop",
     "guzzlehttp/guzzle": "^6.3",
-    "fabstract/validator": "^0.4.11",
-    "fabstract/serializer": "^0.2.2",
-    "fabstract/rest": "^0.10.2"
+    "fabstract/serializer": "^0.2.2"
   }
 }

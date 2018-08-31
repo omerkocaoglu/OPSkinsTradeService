@@ -137,8 +137,7 @@ class UserInventoryService extends ServiceBase
 
         $content = $this->getClient()->get($url)->getBody()->getContents();
         /** @var InventoryResponseModel $inventory_response_model */
-        $inventory_response_model = $this
-            ->serializer
+        $inventory_response_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(InventoryResponseModel::class));
         return $inventory_response_model;
     }

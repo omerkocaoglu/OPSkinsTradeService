@@ -15,7 +15,7 @@ class AppService extends ServiceBase
     {
         $content = $this->getClient()->get(OPSkinsTradeInterfaces::GET_ALL_SUPPORTED_APPS)->getBody()->getContents();
         /** @var SupportedAppModel $supported_apps */
-        $supported_apps = $this->serializer->deserialize($content, new Type(SupportedAppModel::class));
+        $supported_apps = $this->getJSONSerializer()->deserialize($content, new Type(SupportedAppModel::class));
         return $supported_apps;
     }
 }

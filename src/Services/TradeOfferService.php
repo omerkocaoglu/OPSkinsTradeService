@@ -212,8 +212,7 @@ class TradeOfferService extends ServiceBase
             implode($this->item_id_list, ','));
         $content = $this->getClient()->post($url)->getBody()->getContents();
         /** @var SendTradeOfferResponseModel $send_trade_offer_response_model */
-        $send_trade_offer_response_model = $this
-            ->serializer
+        $send_trade_offer_response_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(SendTradeOfferResponseModel::class));
         return $send_trade_offer_response_model;
     }
@@ -234,7 +233,8 @@ class TradeOfferService extends ServiceBase
             $offer_id);
         $content = $this->getClient()->get($url)->getBody()->getContents();
         /** @var StandardTradeOfferModel $offer_model */
-        $offer_model = $this->serializer->deserialize($content, new Type(StandardTradeOfferModel::class));
+        $offer_model = $this->getJSONSerializer()
+            ->deserialize($content, new Type(StandardTradeOfferModel::class));
         return $offer_model;
     }
 
@@ -272,7 +272,8 @@ class TradeOfferService extends ServiceBase
 
         $content = $this->getClient()->get($url)->getBody()->getContents();
         /** @var AllOfferResponseModel $offer_model */
-        $offer_model = $this->serializer->deserialize($content, new Type(AllOfferResponseModel::class));
+        $offer_model = $this->getJSONSerializer()
+            ->deserialize($content, new Type(AllOfferResponseModel::class));
         return $offer_model;
     }
 
@@ -292,7 +293,8 @@ class TradeOfferService extends ServiceBase
             $offer_id);
         $content = $this->getClient()->post($url)->getBody()->getContents();
         /** @var StandardTradeOfferModel $offer_model */
-        $offer_model = $this->serializer->deserialize($content, new Type(StandardTradeOfferModel::class));
+        $offer_model = $this->getJSONSerializer()
+            ->deserialize($content, new Type(StandardTradeOfferModel::class));
         return $offer_model;
     }
 
@@ -316,7 +318,8 @@ class TradeOfferService extends ServiceBase
             $this->two_fa_code);
         $content = $this->getClient()->post($url)->getBody()->getContents();
         /** @var AcceptOfferResponseModel $accept_offer_model */
-        $accept_offer_model = $this->serializer->deserialize($content, new Type(AcceptOfferResponseModel::class));
+        $accept_offer_model = $this->getJSONSerializer()
+            ->deserialize($content, new Type(AcceptOfferResponseModel::class));
         return $accept_offer_model;
     }
 }
