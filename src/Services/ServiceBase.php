@@ -2,7 +2,6 @@
 
 namespace OmerKocaoglu\OPSkinsTradeService\Services;
 
-use Fabstract\Component\Http\Injectable;
 use Fabstract\Component\Serializer\JSONSerializer;
 use Fabstract\Component\Serializer\Normalizer\Type;
 use GuzzleHttp\Client;
@@ -98,6 +97,16 @@ class ServiceBase
     {
         $url .= ('&type=' . $type);
         return $url;
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     * @return string
+     */
+    protected function createQueryString($key, $value)
+    {
+        return $key . '=' . $value . '&';
     }
 
     /**
