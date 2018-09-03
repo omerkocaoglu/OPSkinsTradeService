@@ -160,31 +160,31 @@ class TradeOfferService extends ServiceBase
 
             switch ($state) {
                 case OPSkinsTradeStates::ACTIVE:
-                    $integer_state_list = 2;
+                    $integer_state_list[] = 2;
                     break;
                 case OPSkinsTradeStates::ACCEPTED:
-                    $integer_state_list = 3;
+                    $integer_state_list[] = 3;
                     break;
                 case OPSkinsTradeStates::EXPIRED:
-                    $integer_state_list = 5;
+                    $integer_state_list[] = 5;
                     break;
                 case OPSkinsTradeStates::CANCELED:
-                    $integer_state_list = 6;
+                    $integer_state_list[] = 6;
                     break;
                 case OPSkinsTradeStates::DECLINED:
-                    $integer_state_list = 7;
+                    $integer_state_list[] = 7;
                     break;
                 case OPSkinsTradeStates::INVALID_ITEMS:
-                    $integer_state_list = 8;
+                    $integer_state_list[] = 8;
                     break;
                 case OPSkinsTradeStates::PENDING_CASE_OPEN:
-                    $integer_state_list = 9;
+                    $integer_state_list[] = 9;
                     break;
                 case OPSkinsTradeStates::EXPIRED_CASE_OPEN:
-                    $integer_state_list = 10;
+                    $integer_state_list[] = 10;
                     break;
                 case  OPSkinsTradeStates::FAILED_CASE_OPEN:
-                    $integer_state_list = 12;
+                    $integer_state_list[] = 12;
                     break;
             }
         }
