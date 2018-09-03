@@ -80,12 +80,12 @@ class ServiceBase
 
     /**
      * @param string $url
-     * @param int $state
+     * @param int[] $state_list
      * @return string
      */
-    protected function addStateToUrl($url, $state)
+    protected function addStateToUrl($url, $state_list)
     {
-        $url .= ('&state=' . $state);
+        $url .= ('&state=' . implode(',', $state_list));
         return $url;
     }
 

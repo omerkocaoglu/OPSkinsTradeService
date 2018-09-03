@@ -31,8 +31,8 @@ class TradeOfferService extends ServiceBase
     private $per_page = 0;
     /** @var string */
     private $type = null;
-    /** @var int */
-    private $state = 0;
+    /** @var int[] */
+    private $state_list = [];
     /** @var string */
     private $sort = null;
 
@@ -151,31 +151,31 @@ class TradeOfferService extends ServiceBase
         Assert::isInArray($state, OPSkinsTradeStates::ALL);
         switch ($state) {
             case OPSkinsTradeStates::ACTIVE:
-                $this->state = 2;
+                $this->state_list[] = 2;
                 break;
             case OPSkinsTradeStates::ACCEPTED:
-                $this->state = 3;
+                $this->state_list[] = 3;
                 break;
             case OPSkinsTradeStates::EXPIRED:
-                $this->state = 5;
+                $this->state_list[] = 5;
                 break;
             case OPSkinsTradeStates::CANCELED:
-                $this->state = 6;
+                $this->state_list[] = 6;
                 break;
             case OPSkinsTradeStates::DECLINED:
-                $this->state = 7;
+                $this->state_list[] = 7;
                 break;
             case OPSkinsTradeStates::INVALID_ITEMS:
-                $this->state = 8;
+                $this->state_list[] = 8;
                 break;
             case OPSkinsTradeStates::PENDING_CASE_OPEN:
-                $this->state = 9;
+                $this->state_list[] = 9;
                 break;
             case OPSkinsTradeStates::EXPIRED_CASE_OPEN:
-                $this->state = 10;
+                $this->state_list[] = 10;
                 break;
             case  OPSkinsTradeStates::FAILED_CASE_OPEN:
-                $this->state = 12;
+                $this->state_list[] = 12;
                 break;
         }
 
@@ -250,8 +250,9 @@ class TradeOfferService extends ServiceBase
             $url = $this->addUidToUrl($url, $this->user_id);
         }
 
-        if ($this->state !== 0) {
-            $url = $this->addStateToUrl($url, $this->state);
+        $state_list = array_unique($this->state_list);
+        if (count($state_list) > 0) {
+            $url = $this->addStateToUrl($url, $state_list);
         }
 
         if ($this->type !== null) {
