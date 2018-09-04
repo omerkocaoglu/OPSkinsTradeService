@@ -3,6 +3,7 @@
 namespace OmerKocaoglu\OPSkinsTradeService\Services;
 
 use Fabstract\Component\Assert\Assert;
+use Fabstract\Component\Assert\AssertionException;
 use Fabstract\Component\Serializer\Normalizer\Type;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsOfferSortTypes;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsOfferTypes;
@@ -54,10 +55,13 @@ class TradeOfferService extends ServiceBase
     /**
      * @param string $trade_url
      * @return TradeOfferService
+     * @throws AssertionException
      */
     public function setTradeUrl($trade_url)
     {
-        Assert::isRegexMatches($trade_url, '/https:\/\/trade.opskins.com\/t\/[0-9]*\/\w*$/');
+        if ((new TradeUrlService())->isTradeUrlValid($trade_url) === false) {
+            throw new AssertionException('invalid trade url');
+        }
 
         $this->trade_url = $trade_url;
         return $this;
