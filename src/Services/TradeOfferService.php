@@ -246,7 +246,7 @@ class TradeOfferService extends ServiceBase
             HttpMethods::POST,
             substr($url, 0, -1),
             [
-                'content-type' => ContentTypes::APPLICATION_JSON
+                'content-type' => ContentTypes::APPLICATION_FORM
             ]
         );
         $content = $this->getClient()->send($request)->getBody()->getContents();
