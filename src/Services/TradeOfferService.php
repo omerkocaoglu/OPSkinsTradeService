@@ -231,22 +231,18 @@ class TradeOfferService extends ServiceBase
 
         if ($this->trade_url !== null) {
             $parameter_list[QueryParameterKeys::TRADE_URL] = $this->trade_url;
-            //$url .= $this->createQueryString(QueryParameterKeys::TRADE_URL, $this->trade_url);
         }
 
         if ($this->two_fa_code !== null) {
             $parameter_list[QueryParameterKeys::TWO_FACTOR_CODE] = $this->two_fa_code;
-            //$url .= $this->createQueryString(QueryParameterKeys::TWO_FACTOR_CODE, $this->two_fa_code);
         }
 
         if (count($this->item_id_list) > 0) {
             $parameter_list[QueryParameterKeys::ITEMS] = implode(',', $this->item_id_list);
-            //$url .= $this->createQueryString(QueryParameterKeys::ITEMS, implode(',', $this->item_id_list));
         }
 
         if ($this->message !== null) {
             $parameter_list[QueryParameterKeys::MESSAGE] = $this->message;
-            //$url .= $this->createQueryString(QueryParameterKeys::MESSAGE, $this->message);
         }
 
         $request = new Request(
