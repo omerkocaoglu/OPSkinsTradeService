@@ -24,8 +24,8 @@ class TradeOfferService extends ServiceBase
     private $api_key = null;
     /** @var string */
     private $trade_url = null;
-    /** @var int */
-    private $two_fa_code = 0;
+    /** @var string */
+    private $two_fa_code = null;
     /** @var int[] */
     private $item_id_list = [];
     /** @var int */
@@ -78,8 +78,8 @@ class TradeOfferService extends ServiceBase
      */
     public function setTwoFaCode($two_fa_code)
     {
-        Assert::isInt($two_fa_code);
-        Assert::isNotNegative($two_fa_code);
+        Assert::isNotNull($two_fa_code);
+        Assert::isString($two_fa_code);
 
         $this->two_fa_code = $two_fa_code;
         return $this;
@@ -230,7 +230,7 @@ class TradeOfferService extends ServiceBase
             $url .= $this->createQueryString(QueryParameterKeys::TRADE_URL, $this->trade_url);
         }
 
-        if ($this->two_fa_code !== 0) {
+        if ($this->two_fa_code !== null) {
             $url .= $this->createQueryString(QueryParameterKeys::TWO_FACTOR_CODE, $this->two_fa_code);
         }
 
