@@ -26,6 +26,15 @@ class TradeUrlService extends ServiceBase
     }
 
     /**
+     * @param string $trade_url
+     * @return bool
+     */
+    public function isTradeUrlValid($trade_url)
+    {
+        return preg_match('/https:\/\/trade.opskins.com\/t\/[0-9]*\/\w*$/', $trade_url) === 1 ? true : false;
+    }
+
+    /**
      * @return TradeUrlModel
      */
     public function getTradeUrl()
