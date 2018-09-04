@@ -4,25 +4,25 @@ namespace OmerKocaoglu\OPSkinsTradeService\Constant;
 
 class OPSkinsTradeStates
 {
-    const ACTIVE = 'active';
-    const ACCEPTED = 'accepted';
-    const EXPIRED = 'expired';
-    const CANCELED = 'canceled';
-    const DECLINED = 'declined';
-    const INVALID_ITEMS = 'invalid_items';
-    const PENDING_CASE_OPEN = 'pending_case_open';
-    const EXPIRED_CASE_OPEN = 'expired_case_open';
-    const FAILED_CASE_OPEN = 'failed_case_open';
+    const ACTIVE = 2;
+    const ACCEPTED = 3;
+    const EXPIRED = 5;
+    const CANCELED = 6;
+    const DECLINED = 7;
+    const INVALID_ITEMS = 8;
+    const PENDING_CASE_OPEN = 9;
+    const EXPIRED_CASE_OPEN = 10;
+    const FAILED_CASE_OPEN = 12;
 
     const ALL = [
-        self::ACTIVE => 'active',
-        self::ACCEPTED => 'accepted',
-        self::EXPIRED => 'expired',
-        self::CANCELED => 'canceled',
-        self::DECLINED => 'declined',
-        self::INVALID_ITEMS => 'invalid_items',
-        self::PENDING_CASE_OPEN => 'pending_case_open',
-        self::EXPIRED_CASE_OPEN => 'expired_case_open',
-        self::FAILED_CASE_OPEN => 'failed_case_open'
+        self::ACTIVE => 2,
+        self::ACCEPTED => 3,
+        self::EXPIRED => 5,
+        self::CANCELED => 6,
+        self::DECLINED => 7,
+        self::INVALID_ITEMS => 8,
+        self::PENDING_CASE_OPEN => 9,
+        self::EXPIRED_CASE_OPEN => 10,
+        self::FAILED_CASE_OPEN => 12
     ];
 }

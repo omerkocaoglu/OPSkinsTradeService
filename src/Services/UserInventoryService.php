@@ -137,7 +137,7 @@ class UserInventoryService extends ServiceBase
             $this->uid = $matches_for_uid['uid'];
         }
 
-        Assert::isPositive(intval($this->uid)); //?uid=%s&app_id=%s
+        Assert::isPositive(intval($this->uid));
 
         $url = sprintf(OPSkinsTradeInterfaces::GET_INVENTORY);
 

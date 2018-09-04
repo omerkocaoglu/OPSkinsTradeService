@@ -36,8 +36,8 @@ class TradeOfferService extends ServiceBase
     private $state_list = [];
     /** @var string */
     private $sort = null;
-    /** @var int */
-    private $offer_id = 0;
+    /** @var int[] */
+    private $offer_id_list = [];
 
     /**
      * @param string $api_key
@@ -153,43 +153,12 @@ class TradeOfferService extends ServiceBase
     {
         Assert::isArrayOfString($state_list);
 
-        /** @var int[] $integer_state_list */
-        $integer_state_list = [];
         foreach ($state_list as $state) {
             Assert::isInArray($state, OPSkinsTradeStates::ALL);
 
-            switch ($state) {
-                case OPSkinsTradeStates::ACTIVE:
-                    $integer_state_list[] = 2;
-                    break;
-                case OPSkinsTradeStates::ACCEPTED:
-                    $integer_state_list[] = 3;
-                    break;
-                case OPSkinsTradeStates::EXPIRED:
-                    $integer_state_list[] = 5;
-                    break;
-                case OPSkinsTradeStates::CANCELED:
-                    $integer_state_list[] = 6;
-                    break;
-                case OPSkinsTradeStates::DECLINED:
-                    $integer_state_list[] = 7;
-                    break;
-                case OPSkinsTradeStates::INVALID_ITEMS:
-                    $integer_state_list[] = 8;
-                    break;
-                case OPSkinsTradeStates::PENDING_CASE_OPEN:
-                    $integer_state_list[] = 9;
-                    break;
-                case OPSkinsTradeStates::EXPIRED_CASE_OPEN:
-                    $integer_state_list[] = 10;
-                    break;
-                case  OPSkinsTradeStates::FAILED_CASE_OPEN:
-                    $integer_state_list[] = 12;
-                    break;
-            }
         }
 
-        $this->state_list = $integer_state_list;
+        $this->state_list = $state_list;
 
         return $this;
     }
@@ -207,13 +176,16 @@ class TradeOfferService extends ServiceBase
     }
 
     /**
-     * @param int $offer_id
+     * @param int[] $offer_id_list
      */
-    public function setOfferId($offer_id)
+    public function setOfferIdList($offer_id_list)
     {
-        Assert::isInt($offer_id);
+        Assert::isArray($offer_id_list);
+        foreach ($offer_id_list as $offer_id) {
+            Assert::isInt($offer_id);
+        }
 
-        $this->offer_id = $offer_id;
+        $this->offer_id_list = $offer_id_list;
         return;
     }
 
@@ -226,7 +198,7 @@ class TradeOfferService extends ServiceBase
         Assert::isNotNegative($this->two_fa_code);
         Assert::isNotEqualTo($this->two_fa_code, 0);
         Assert::isString($this->trade_url);
-        Assert::isNotEmptyArray($this->item_id_list); //?trade_url=%s&twofactor_code=%s&items=%s
+        Assert::isNotEmptyArray($this->item_id_list);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::SEND_OFFER,
@@ -259,14 +231,14 @@ class TradeOfferService extends ServiceBase
     {
         Assert::isInt($offer_id);
         Assert::isNotNegative($offer_id);
-        Assert::isNotEqualTo($offer_id, 0); //offer_id=%s
+        Assert::isNotEqualTo($offer_id, 0);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::GET_OFFER,
             $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
 
-        if ($this->offer_id !== 0) {
-            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, $this->offer_id);
+        if (count($this->offer_id_list) > 0) {
+            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
         }
 
         $content = $this->getClient()->get(substr($url, 0, -1))->getBody()->getContents();
@@ -309,6 +281,10 @@ class TradeOfferService extends ServiceBase
             $url .= $this->createQueryString(QueryParameterKeys::SORT, $this->sort);
         }
 
+        if (count($this->offer_id_list) > 0) {
+            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
+        }
+
         $content = $this->getClient()->get(substr($url, 0, -1))->getBody()->getContents();
         /** @var AllOfferResponseModel $offer_model */
         $offer_model = $this->getJSONSerializer()
@@ -324,14 +300,14 @@ class TradeOfferService extends ServiceBase
     {
         Assert::isInt($offer_id);
         Assert::isNotNegative($offer_id);
-        Assert::isNotEqualTo($offer_id, 0); //offer_id=%s
+        Assert::isNotEqualTo($offer_id, 0);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::CANCEL_OFFER,
             $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
 
-        if ($this->offer_id !== 0) {
-            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, $this->offer_id);
+        if (count($this->offer_id_list) > 0) {
+            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
         }
 
         $content = $this->getClient()->post(substr($url, 0, -1))->getBody()->getContents();
@@ -352,14 +328,14 @@ class TradeOfferService extends ServiceBase
         Assert::isNotEqualTo($offer_id, 0);
         Assert::isInt($this->two_fa_code);
         Assert::isNotNegative($this->two_fa_code);
-        Assert::isNotEqualTo($this->two_fa_code, 0); //?offer_id=%s&twofactor_code=%s
+        Assert::isNotEqualTo($this->two_fa_code, 0);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::ACCEPT_OFFER,
             $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
 
-        if ($this->offer_id !== 0) {
-            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, $this->offer_id);
+        if (count($this->offer_id_list) !== 0) {
+            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
         }
 
         if ($this->two_fa_code !== 0) {
