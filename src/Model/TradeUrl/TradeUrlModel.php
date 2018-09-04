@@ -4,8 +4,9 @@ namespace OmerKocaoglu\OPSkinsTradeService\Model\TradeUrl;
 
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
+use OmerKocaoglu\OPSkinsTradeService\Model\ResponseBase;
 
-class TradeUrlModel implements NormalizableInterface
+class TradeUrlModel extends ResponseBase implements NormalizableInterface
 {
     /** @var int */
     public $uid = 0;

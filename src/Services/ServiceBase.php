@@ -15,7 +15,7 @@ class ServiceBase
     protected function getClient()
     {
         if ($this->client === null) {
-            $this->client = new Client();
+            $this->client = new Client(['http_errors' => false]);
             return $this->client;
         }
 

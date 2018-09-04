@@ -167,6 +167,8 @@ class UserInventoryService extends ServiceBase
         /** @var InventoryResponseModel $inventory_response_model */
         $inventory_response_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(InventoryResponseModel::class));
+        $inventory_response_model->response_content = $content;
+
         return $inventory_response_model;
     }
 }

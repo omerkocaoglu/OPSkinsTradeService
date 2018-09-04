@@ -257,6 +257,7 @@ class TradeOfferService extends ServiceBase
         /** @var SendTradeOfferResponseModel $send_trade_offer_response_model */
         $send_trade_offer_response_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(SendTradeOfferResponseModel::class));
+        $send_trade_offer_response_model->response_content = $content;
         return $send_trade_offer_response_model;
     }
 

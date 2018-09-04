@@ -60,7 +60,8 @@ class TradeUrlService extends ServiceBase
         $content = $this->getClient()->get($url)->getBody()->getContents();
         /** @var TradeUrlModel $trade_url_model */
         $trade_url_model = $this->getJSONSerializer()
-            ->deserialize($content, new Type(TradeUrlResponseModel::class));
+            ->deserialize($content, new Type(TradeUrlModel::class));
+        $trade_url_model->response_content = $content;
         return $trade_url_model;
     }
 }

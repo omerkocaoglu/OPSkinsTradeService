@@ -5,8 +5,9 @@ namespace OmerKocaoglu\OPSkinsTradeService\Model\App;
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
 use Fabstract\Component\Serializer\Normalizer\Type;
+use OmerKocaoglu\OPSkinsTradeService\Model\ResponseBase;
 
-class SupportedAppModel implements NormalizableInterface
+class SupportedAppModel extends ResponseBase implements NormalizableInterface
 {
     /** @var int */
     public $status = 0;

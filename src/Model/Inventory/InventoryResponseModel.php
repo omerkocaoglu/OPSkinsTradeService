@@ -5,8 +5,9 @@ namespace OmerKocaoglu\OPSkinsTradeService\Model\Inventory;
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
 use Fabstract\Component\Serializer\Normalizer\Type;
+use OmerKocaoglu\OPSkinsTradeService\Model\ResponseBase;
 
-class InventoryResponseModel implements NormalizableInterface
+class InventoryResponseModel extends ResponseBase implements NormalizableInterface
 {
     /** @var int */
     public $status = 0;
