@@ -42,6 +42,8 @@ class TradeOfferService extends ServiceBase
     private $sort = null;
     /** @var int[] */
     private $offer_id_list = [];
+    /** @var string */
+    private $message = null;
 
     /**
      * @param string $api_key
@@ -197,6 +199,19 @@ class TradeOfferService extends ServiceBase
     }
 
     /**
+     * @param string $message
+     * @return TradeOfferService
+     */
+    public function setMessage($message)
+    {
+        Assert::isNotNull($message);
+        Assert::isString($message);
+
+        $this->message = $message;
+        return $this;
+    }
+
+    /**
      * @return SendTradeOfferResponseModel
      */
     public function sendOffer()
@@ -221,6 +236,10 @@ class TradeOfferService extends ServiceBase
 
         if (count($this->item_id_list) > 0) {
             $url .= $this->createQueryString(QueryParameterKeys::ITEMS, implode(',', $this->item_id_list));
+        }
+
+        if ($this->message !== null) {
+            $url .= $this->createQueryString(QueryParameterKeys::MESSAGE, $this->message);
         }
 
         $request = new Request(
