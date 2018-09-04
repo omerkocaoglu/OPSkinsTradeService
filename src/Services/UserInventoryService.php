@@ -3,6 +3,7 @@
 namespace OmerKocaoglu\OPSkinsTradeService\Services;
 
 use Fabstract\Component\Assert\Assert;
+use Fabstract\Component\Assert\AssertionException;
 use Fabstract\Component\Serializer\Normalizer\Type;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsTradeInterfaces;
 use OmerKocaoglu\OPSkinsTradeService\Constant\QueryParameterKeys;
@@ -27,10 +28,13 @@ class UserInventoryService extends ServiceBase
     /**
      * @param string $trade_url
      * @return UserInventoryService
+     * @throws AssertionException
      */
     public function setTradeUrl($trade_url)
     {
-        Assert::isRegexMatches($trade_url, '/https:\/\/trade.opskins.com\/t\/[0-9]*\/\w*$/');
+        if ((new TradeUrlService())->isTradeUrlValid($this->trade_url) === false) {
+            throw new AssertionException('invalid trade url');
+        }
 
         $this->trade_url = $trade_url;
         return $this;
@@ -132,10 +136,7 @@ class UserInventoryService extends ServiceBase
     {
         Assert::isNotNull($this->trade_url);
 
-        preg_match('/https:\/\/trade.opskins.com\/t\/(?<uid>[0-9]*)\/\w*$/', $this->trade_url, $matches_for_uid);
-        if (count($matches_for_uid) > 0 && $matches_for_uid['uid'] !== null) {
-            $this->uid = $matches_for_uid['uid'];
-        }
+        $this->uid = (new TradeUrlService())->getUidFromTradeUrl($this->trade_url);
 
         Assert::isPositive(intval($this->uid));
 

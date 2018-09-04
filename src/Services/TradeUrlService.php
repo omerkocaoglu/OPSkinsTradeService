@@ -31,7 +31,21 @@ class TradeUrlService extends ServiceBase
      */
     public function isTradeUrlValid($trade_url)
     {
-        return preg_match('/https:\/\/trade.opskins.com\/t\/[0-9]*\/\w*$/', $trade_url) === 1 ? true : false;
+        return preg_match('/https:\/\/trade.opskins.com\/t\/(?<uid>[0-9]*)\/\w*$/', $trade_url) === 1 ? true : false;
+    }
+
+    /**
+     * @param string $trade_url
+     * @return string|null
+     */
+    public function getUidFromTradeUrl($trade_url)
+    {
+        preg_match('/https:\/\/trade.opskins.com\/t\/(?<uid>[0-9]*)\/\w*$/', $trade_url, $matches_for_uid);
+        if (count($matches_for_uid) > 0 && $matches_for_uid['uid'] !== null) {
+            return $matches_for_uid['uid'];
+        }
+
+        return null;
     }
 
     /**
