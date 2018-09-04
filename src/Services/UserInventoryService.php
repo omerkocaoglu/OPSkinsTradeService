@@ -7,6 +7,7 @@ use Fabstract\Component\Assert\AssertionException;
 use Fabstract\Component\Serializer\Normalizer\Type;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsTradeInterfaces;
 use OmerKocaoglu\OPSkinsTradeService\Constant\QueryParameterKeys;
+use OmerKocaoglu\OPSkinsTradeService\Constant\RegexPatterns;
 use OmerKocaoglu\OPSkinsTradeService\Constant\InventorySortParameters;
 use OmerKocaoglu\OPSkinsTradeService\Model\Inventory\InventoryResponseModel;
 
@@ -60,7 +61,7 @@ class UserInventoryService extends ServiceBase
      */
     public function setAppId($app_id)
     {
-        Assert::isRegexMatches($app_id, '/^[1-9]$/');
+        Assert::isRegexMatches($app_id, RegexPatterns::APP_ID);
 
         $this->app_id = $app_id;
         return $this;

@@ -6,6 +6,7 @@ use Fabstract\Component\Assert\Assert;
 use Fabstract\Component\Serializer\JSONSerializer;
 use Fabstract\Component\Serializer\Normalizer\Type;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsTradeInterfaces;
+use OmerKocaoglu\OPSkinsTradeService\Constant\RegexPatterns;
 use OmerKocaoglu\OPSkinsTradeService\Model\TradeUrl\TradeUrlModel;
 use OmerKocaoglu\OPSkinsTradeService\Model\TradeUrl\TradeUrlResponseModel;
 
@@ -31,7 +32,7 @@ class TradeUrlService extends ServiceBase
      */
     public function isTradeUrlValid($trade_url)
     {
-        return preg_match('/https:\/\/trade.opskins.com\/t\/(?<uid>[0-9]*)\/\w*$/', $trade_url) === 1 ? true : false;
+        return preg_match(RegexPatterns::TRADE_URL, $trade_url) === 1;
     }
 
     /**
@@ -40,7 +41,7 @@ class TradeUrlService extends ServiceBase
      */
     public function getUidFromTradeUrl($trade_url)
     {
-        preg_match('/https:\/\/trade.opskins.com\/t\/(?<uid>[0-9]*)\/\w*$/', $trade_url, $matches_for_uid);
+        preg_match(RegexPatterns::TRADE_URL, $trade_url, $matches_for_uid);
         if (count($matches_for_uid) > 0 && $matches_for_uid['uid'] !== null) {
             return $matches_for_uid['uid'];
         }
