@@ -253,7 +253,7 @@ class TradeOfferService extends ServiceBase
             HttpMethods::POST,
             substr($url, 0, -1),
             [
-                'content-type' => ContentTypes::APPLICATION_FORM
+                'content-type' => ContentTypes::APPLICATION_JSON
             ],
             json_encode($parameter_list)
         );
