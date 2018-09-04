@@ -216,9 +216,9 @@ class TradeOfferService extends ServiceBase
      */
     public function sendOffer()
     {
-        Assert::isInt($this->two_fa_code);
-        Assert::isNotNegative($this->two_fa_code);
-        Assert::isNotEqualTo($this->two_fa_code, 0);
+        Assert::isNotNull($this->two_fa_code);
+        Assert::isString($this->two_fa_code);
+        Assert::isNotNull($this->trade_url);
         Assert::isString($this->trade_url);
         Assert::isNotEmptyArray($this->item_id_list);
 
