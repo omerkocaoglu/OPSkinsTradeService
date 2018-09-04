@@ -57,11 +57,16 @@ class TradeUrlService extends ServiceBase
         $url = sprintf(
             OPSkinsTradeInterfaces::GET_TRADE_URL,
             $this->api_key === null ? $this->getServiceConfig()->api_key : $this->api_key);
-        $content = $this->getClient()->get($url)->getBody()->getContents();
+
+        $response = $this->getClient()->get(substr($url, 0, -1));
+        $http_status_code = $response->getStatusCode();
+        $content = $response->getBody()->getContents();
         /** @var TradeUrlModel $trade_url_model */
         $trade_url_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(TradeUrlModel::class));
         $trade_url_model->response_content = $content;
+        $trade_url_model->http_status_code = $http_status_code;
+
         return $trade_url_model;
     }
 }

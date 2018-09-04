@@ -13,10 +13,14 @@ class AppService extends ServiceBase
      */
     public function getSupportedApps()
     {
-        $content = $this->getClient()->get(OPSkinsTradeInterfaces::GET_ALL_SUPPORTED_APPS)->getBody()->getContents();
+        $response = $this->getClient()->get(OPSkinsTradeInterfaces::GET_ALL_SUPPORTED_APPS);
+        $content = $response->getBody()->getContents();
+        $http_status_code = $response->getStatusCode();
         /** @var SupportedAppModel $supported_apps */
         $supported_apps = $this->getJSONSerializer()->deserialize($content, new Type(SupportedAppModel::class));
         $supported_apps->response_content = $content;
+        $supported_apps->http_status_code = $http_status_code;
+
         return $supported_apps;
     }
 }

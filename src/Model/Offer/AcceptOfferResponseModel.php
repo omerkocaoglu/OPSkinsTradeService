@@ -6,9 +6,10 @@ use Fabstract\Component\Serializer\Normalizer\ArrayType;
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
 use Fabstract\Component\Serializer\Normalizer\Type;
+use OmerKocaoglu\OPSkinsTradeService\Model\ResponseBase;
 use OmerKocaoglu\OPSkinsTradeService\Model\Item\StandardItemModel;
 
-class AcceptOfferResponseModel implements NormalizableInterface
+class AcceptOfferResponseModel extends ResponseBase implements NormalizableInterface
 {
     /** @var StandardTradeOfferModel */
     public $offer = null;

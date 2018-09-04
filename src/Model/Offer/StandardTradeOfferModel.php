@@ -5,8 +5,9 @@ namespace OmerKocaoglu\OPSkinsTradeService\Model\Offer;
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
 use Fabstract\Component\Serializer\Normalizer\Type;
+use OmerKocaoglu\OPSkinsTradeService\Model\ResponseBase;
 
-class StandardTradeOfferModel implements NormalizableInterface
+class StandardTradeOfferModel extends ResponseBase implements NormalizableInterface
 {
     /** @var int */
     public $id = 0;

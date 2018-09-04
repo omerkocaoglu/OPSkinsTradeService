@@ -5,8 +5,9 @@ namespace OmerKocaoglu\OPSkinsTradeService\Model\Offer;
 use Fabstract\Component\Serializer\Normalizer\ArrayType;
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
+use OmerKocaoglu\OPSkinsTradeService\Model\ResponseBase;
 
-class AllOfferResponseModel implements NormalizableInterface
+class AllOfferResponseModel extends ResponseBase implements NormalizableInterface
 {
     /** @var int */
     public $status = 0;

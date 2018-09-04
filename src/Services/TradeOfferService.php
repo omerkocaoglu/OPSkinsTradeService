@@ -253,11 +253,16 @@ class TradeOfferService extends ServiceBase
             ],
             json_encode($parameter_list)
         );
-        $content = $this->getClient()->send($request)->getBody()->getContents();
+
+        $response = $this->getClient()->send($request);
+        $content = $response->getBody()->getContents();
+        $http_status_code = $response->getStatusCode();
         /** @var SendTradeOfferResponseModel $send_trade_offer_response_model */
         $send_trade_offer_response_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(SendTradeOfferResponseModel::class));
         $send_trade_offer_response_model->response_content = $content;
+        $send_trade_offer_response_model->http_status_code = $http_status_code;
+
         return $send_trade_offer_response_model;
     }
 
@@ -279,10 +284,15 @@ class TradeOfferService extends ServiceBase
             $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
         }
 
-        $content = $this->getClient()->get(substr($url, 0, -1))->getBody()->getContents();
+        $response = $this->getClient()->get(substr($url, 0, -1));
+        $content = $response->getBody()->getContents();
+        $http_status_code = $response->getStatusCode();
         /** @var StandardTradeOfferModel $offer_model */
         $offer_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(StandardTradeOfferModel::class));
+        $offer_model->response_content = $content;
+        $offer_model->http_status_code = $http_status_code;
+
         return $offer_model;
     }
 
@@ -323,10 +333,16 @@ class TradeOfferService extends ServiceBase
             $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
         }
 
-        $content = $this->getClient()->get(substr($url, 0, -1))->getBody()->getContents();
+        $response = $this->getClient()->get(substr($url, 0, -1));
+        $http_status_code = $response->getStatusCode();
+        $content = $response->getBody()->getContents();
+
         /** @var AllOfferResponseModel $offer_model */
         $offer_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(AllOfferResponseModel::class));
+        $offer_model->response_content = $content;
+        $offer_model->http_status_code = $http_status_code;
+
         return $offer_model;
     }
 
@@ -344,14 +360,29 @@ class TradeOfferService extends ServiceBase
             OPSkinsTradeInterfaces::CANCEL_OFFER,
             $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
 
-        if (count($this->offer_id_list) > 0) {
-            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
-        }
+        /** @var string[] $parameter_list */
+        $parameter_list = [];
+        $parameter_list[QueryParameterKeys::OFFER_ID] = $offer_id;
 
-        $content = $this->getClient()->post(substr($url, 0, -1))->getBody()->getContents();
+        $request = new Request(
+            HttpMethods::POST,
+            substr($url, 0, -1),
+            [
+                'content-type' => ContentTypes::APPLICATION_JSON
+            ],
+            json_encode($parameter_list)
+        );
+
+        $response = $this->getClient()->post($request);
+        $content = $response->getBody()->getContents();
+        $http_status_code = $response->getStatusCode();
+
         /** @var StandardTradeOfferModel $offer_model */
         $offer_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(StandardTradeOfferModel::class));
+        $offer_model->response_content = $content;
+        $offer_model->http_status_code = $http_status_code;
+
         return $offer_model;
     }
 
@@ -364,26 +395,39 @@ class TradeOfferService extends ServiceBase
         Assert::isInt($offer_id);
         Assert::isNotNegative($offer_id);
         Assert::isNotEqualTo($offer_id, 0);
-        Assert::isInt($this->two_fa_code);
-        Assert::isNotNegative($this->two_fa_code);
-        Assert::isNotEqualTo($this->two_fa_code, 0);
+
+        Assert::isNotNull($this->two_fa_code);
+        Assert::isString($this->two_fa_code);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::ACCEPT_OFFER,
             $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
 
-        if (count($this->offer_id_list) !== 0) {
-            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
-        }
 
-        if ($this->two_fa_code !== 0) {
-            $url .= $this->createQueryString(QueryParameterKeys::TWO_FACTOR_CODE, $this->two_fa_code);
-        }
+        /** @var string[] $parameter_list */
+        $parameter_list = [];
+        $parameter_list[QueryParameterKeys::OFFER_ID] = $offer_id;
+        $parameter_list[QueryParameterKeys::TWO_FACTOR_CODE] = $this->two_fa_code;
 
-        $content = $this->getClient()->post(substr($url, 0, -1))->getBody()->getContents();
+        $request = new Request(
+            HttpMethods::POST,
+            substr($url, 0, -1),
+            [
+                'content-type' => ContentTypes::APPLICATION_JSON
+            ],
+            json_encode($parameter_list)
+        );
+
+        $response = $this->getClient()->send($request);
+        $content = $response->getBody()->getContents();
+        $http_status_code = $response->getStatusCode();
         /** @var AcceptOfferResponseModel $accept_offer_model */
         $accept_offer_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(AcceptOfferResponseModel::class));
+
+        $accept_offer_model->response_content = $content;
+        $accept_offer_model->http_status_code = $http_status_code;
+
         return $accept_offer_model;
     }
 }

@@ -163,11 +163,14 @@ class UserInventoryService extends ServiceBase
             $url .= $this->createQueryString(QueryParameterKeys::SORT, $this->sort);
         }
 
-        $content = $this->getClient()->get(substr($url, 0, -1))->getBody()->getContents();
+        $response = $this->getClient()->get(substr($url, 0, -1));
+        $http_status_code = $response->getStatusCode();
+        $content = $response->getBody()->getContents();
         /** @var InventoryResponseModel $inventory_response_model */
         $inventory_response_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(InventoryResponseModel::class));
         $inventory_response_model->response_content = $content;
+        $inventory_response_model->http_status_code = $http_status_code;
 
         return $inventory_response_model;
     }
