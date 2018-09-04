@@ -5,6 +5,9 @@ namespace OmerKocaoglu\OPSkinsTradeService\Services;
 use Fabstract\Component\Assert\Assert;
 use Fabstract\Component\Assert\AssertionException;
 use Fabstract\Component\Serializer\Normalizer\Type;
+use GuzzleHttp\Psr7\Request;
+use OmerKocaoglu\OPSkinsTradeService\Constant\ContentTypes;
+use OmerKocaoglu\OPSkinsTradeService\Constant\HttpMethods;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsOfferSortTypes;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsOfferTypes;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsTradeStates;
@@ -220,7 +223,14 @@ class TradeOfferService extends ServiceBase
             $url .= $this->createQueryString(QueryParameterKeys::ITEMS, implode(',', $this->item_id_list));
         }
 
-        $content = $this->getClient()->post(substr($url, 0, -1))->getBody()->getContents();
+        $request = new Request(
+            HttpMethods::POST,
+            substr($url, 0, -1),
+            [
+                'content-type' => ContentTypes::APPLICATION_JSON
+            ]
+        );
+        $content = $this->getClient()->send($request)->getBody()->getContents();
         /** @var SendTradeOfferResponseModel $send_trade_offer_response_model */
         $send_trade_offer_response_model = $this->getJSONSerializer()
             ->deserialize($content, new Type(SendTradeOfferResponseModel::class));
