@@ -226,20 +226,27 @@ class TradeOfferService extends ServiceBase
             OPSkinsTradeInterfaces::SEND_OFFER,
             $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
 
+        /** @var string[] $parameter_list */
+        $parameter_list = [];
+
         if ($this->trade_url !== null) {
-            $url .= $this->createQueryString(QueryParameterKeys::TRADE_URL, $this->trade_url);
+            $parameter_list[QueryParameterKeys::TRADE_URL] = $this->trade_url;
+            //$url .= $this->createQueryString(QueryParameterKeys::TRADE_URL, $this->trade_url);
         }
 
         if ($this->two_fa_code !== null) {
-            $url .= $this->createQueryString(QueryParameterKeys::TWO_FACTOR_CODE, $this->two_fa_code);
+            $parameter_list[QueryParameterKeys::TWO_FACTOR_CODE] = $this->two_fa_code;
+            //$url .= $this->createQueryString(QueryParameterKeys::TWO_FACTOR_CODE, $this->two_fa_code);
         }
 
         if (count($this->item_id_list) > 0) {
-            $url .= $this->createQueryString(QueryParameterKeys::ITEMS, implode(',', $this->item_id_list));
+            $parameter_list[QueryParameterKeys::ITEMS] = implode(',', $this->item_id_list);
+            //$url .= $this->createQueryString(QueryParameterKeys::ITEMS, implode(',', $this->item_id_list));
         }
 
         if ($this->message !== null) {
-            $url .= $this->createQueryString(QueryParameterKeys::MESSAGE, $this->message);
+            $parameter_list[QueryParameterKeys::MESSAGE] = $this->message;
+            //$url .= $this->createQueryString(QueryParameterKeys::MESSAGE, $this->message);
         }
 
         $request = new Request(
@@ -247,7 +254,8 @@ class TradeOfferService extends ServiceBase
             substr($url, 0, -1),
             [
                 'content-type' => ContentTypes::APPLICATION_FORM
-            ]
+            ],
+            json_encode($parameter_list)
         );
         $content = $this->getClient()->send($request)->getBody()->getContents();
         /** @var SendTradeOfferResponseModel $send_trade_offer_response_model */
