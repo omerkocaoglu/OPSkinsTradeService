@@ -217,7 +217,7 @@ class TradeOfferService extends ServiceBase
         }
 
         if (count($this->item_id_list) > 0) {
-            $url .= $this->createQueryString(QueryParameterKeys::ITEMS, $this->item_id_list);
+            $url .= $this->createQueryString(QueryParameterKeys::ITEMS, implode(',', $this->item_id_list));
         }
 
         $content = $this->getClient()->post(substr($url, 0, -1))->getBody()->getContents();
