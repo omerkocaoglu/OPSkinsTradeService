@@ -33,7 +33,7 @@ class UserInventoryService extends ServiceBase
      */
     public function setTradeUrl($trade_url)
     {
-        if ((new TradeUrlService())->isTradeUrlValid($this->trade_url) === false) {
+        if ((new TradeUrlService())->isTradeUrlValid($trade_url) === false) {
             throw new AssertionException('invalid trade url');
         }
 
