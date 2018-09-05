@@ -186,6 +186,7 @@ class TradeOfferService extends ServiceBase
 
     /**
      * @param int[] $offer_id_list
+     * @return TradeOfferService
      */
     public function setOfferIdList($offer_id_list)
     {
@@ -195,7 +196,7 @@ class TradeOfferService extends ServiceBase
         }
 
         $this->offer_id_list = $offer_id_list;
-        return;
+        return $this;
     }
 
     /**
