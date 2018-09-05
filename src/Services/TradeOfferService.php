@@ -6,7 +6,6 @@ use Fabstract\Component\Assert\Assert;
 use Fabstract\Component\Assert\AssertionException;
 use Fabstract\Component\Serializer\Normalizer\Type;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use OmerKocaoglu\OPSkinsTradeService\Constant\ContentTypes;
 use OmerKocaoglu\OPSkinsTradeService\Constant\HttpMethods;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsOfferSortTypes;
@@ -55,6 +54,7 @@ class TradeOfferService extends ServiceBase
     public function setApiKey($api_key)
     {
         Assert::isString($api_key);
+        Assert::isNotNull($api_key);
 
         $this->api_key = $api_key;
         return $this;
@@ -81,8 +81,8 @@ class TradeOfferService extends ServiceBase
      */
     public function setTwoFaCode($two_fa_code)
     {
-        Assert::isNotNull($two_fa_code);
         Assert::isString($two_fa_code);
+        Assert::isNotNull($two_fa_code);
 
         $this->two_fa_code = $two_fa_code;
         return $this;
@@ -109,9 +109,7 @@ class TradeOfferService extends ServiceBase
      */
     public function setPage($page)
     {
-        Assert::isInt($page);
-        Assert::isNotNegative($page);
-        Assert::isNotEqualTo($page, 0);
+        Assert::isPositive($page);
 
         $this->page = $page;
         return $this;
@@ -123,9 +121,7 @@ class TradeOfferService extends ServiceBase
      */
     public function setPerPage($per_page)
     {
-        Assert::isInt($per_page);
-        Assert::isNotNegative($per_page);
-        Assert::isNotEqualTo($per_page, 0);
+        Assert::isPositive($per_page);
 
         $this->per_page = $per_page;
         return $this;
@@ -137,9 +133,7 @@ class TradeOfferService extends ServiceBase
      */
     public function setUid($uid)
     {
-        Assert::isInt($uid);
-        Assert::isNotNegative($uid);
-        Assert::isNotEqualTo($uid, 0);
+        Assert::isPositive($uid);
 
         $this->uid = $uid;
         return $this;
@@ -208,8 +202,8 @@ class TradeOfferService extends ServiceBase
      */
     public function setMessage($message)
     {
-        Assert::isNotNull($message);
         Assert::isString($message);
+        Assert::isNotNull($message);
 
         $this->message = $message;
         return $this;
@@ -220,10 +214,10 @@ class TradeOfferService extends ServiceBase
      */
     public function sendOffer()
     {
-        Assert::isNotNull($this->two_fa_code);
         Assert::isString($this->two_fa_code);
-        Assert::isNotNull($this->trade_url);
+        Assert::isNotNull($this->two_fa_code);
         Assert::isString($this->trade_url);
+        Assert::isNotNull($this->trade_url);
         Assert::isNotEmptyArray($this->item_id_list);
 
         $url = sprintf(
@@ -273,9 +267,7 @@ class TradeOfferService extends ServiceBase
      */
     public function getOffer($offer_id)
     {
-        Assert::isInt($offer_id);
-        Assert::isNotNegative($offer_id);
-        Assert::isNotEqualTo($offer_id, 0);
+        Assert::isPositive($offer_id);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::GET_OFFER,
@@ -344,9 +336,7 @@ class TradeOfferService extends ServiceBase
      */
     public function cancelOffer($offer_id)
     {
-        Assert::isInt($offer_id);
-        Assert::isNotNegative($offer_id);
-        Assert::isNotEqualTo($offer_id, 0);
+        Assert::isPositive($offer_id);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::CANCEL_OFFER,
@@ -380,12 +370,9 @@ class TradeOfferService extends ServiceBase
      */
     public function acceptOffer($offer_id)
     {
-        Assert::isInt($offer_id);
-        Assert::isNotNegative($offer_id);
-        Assert::isNotEqualTo($offer_id, 0);
-
-        Assert::isNotNull($this->two_fa_code);
+        Assert::isPositive($offer_id);
         Assert::isString($this->two_fa_code);
+        Assert::isNotNull($this->two_fa_code);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::ACCEPT_OFFER,
