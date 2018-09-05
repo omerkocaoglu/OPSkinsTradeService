@@ -6,6 +6,7 @@ use Fabstract\Component\Assert\Assert;
 use Fabstract\Component\Assert\AssertionException;
 use Fabstract\Component\Serializer\Normalizer\Type;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use OmerKocaoglu\OPSkinsTradeService\Constant\ContentTypes;
 use OmerKocaoglu\OPSkinsTradeService\Constant\HttpMethods;
 use OmerKocaoglu\OPSkinsTradeService\Constant\OPSkinsOfferSortTypes;
@@ -17,6 +18,8 @@ use OmerKocaoglu\OPSkinsTradeService\Model\Offer\AcceptOfferResponseModel;
 use OmerKocaoglu\OPSkinsTradeService\Model\Offer\AllOfferResponseModel;
 use OmerKocaoglu\OPSkinsTradeService\Model\Offer\SendTradeOfferResponseModel;
 use OmerKocaoglu\OPSkinsTradeService\Model\Offer\StandardTradeOfferModel;
+use OmerKocaoglu\OPSkinsTradeService\Model\ResponseBase;
+use Psr\Http\Message\ResponseInterface;
 
 class TradeOfferService extends ServiceBase
 {
@@ -256,13 +259,8 @@ class TradeOfferService extends ServiceBase
         );
 
         $response = $this->getClient()->send($request);
-        $content = $response->getBody()->getContents();
-        $http_status_code = $response->getStatusCode();
         /** @var SendTradeOfferResponseModel $send_trade_offer_response_model */
-        $send_trade_offer_response_model = $this->getJSONSerializer()
-            ->deserialize($content, new Type(SendTradeOfferResponseModel::class));
-        $send_trade_offer_response_model->response_content = $content;
-        $send_trade_offer_response_model->http_status_code = $http_status_code;
+        $send_trade_offer_response_model = $this->getResponseModelFromResponse($response, new Type(SendTradeOfferResponseModel::class));
 
         return $send_trade_offer_response_model;
     }
@@ -286,13 +284,8 @@ class TradeOfferService extends ServiceBase
         }
 
         $response = $this->getClient()->get(substr($url, 0, -1));
-        $content = $response->getBody()->getContents();
-        $http_status_code = $response->getStatusCode();
         /** @var StandardTradeOfferModel $offer_model */
-        $offer_model = $this->getJSONSerializer()
-            ->deserialize($content, new Type(StandardTradeOfferModel::class));
-        $offer_model->response_content = $content;
-        $offer_model->http_status_code = $http_status_code;
+        $offer_model = $this->getResponseModelFromResponse($response, new Type(StandardTradeOfferModel::class));
 
         return $offer_model;
     }
@@ -335,14 +328,8 @@ class TradeOfferService extends ServiceBase
         }
 
         $response = $this->getClient()->get(substr($url, 0, -1));
-        $http_status_code = $response->getStatusCode();
-        $content = $response->getBody()->getContents();
-
         /** @var AllOfferResponseModel $offer_model */
-        $offer_model = $this->getJSONSerializer()
-            ->deserialize($content, new Type(AllOfferResponseModel::class));
-        $offer_model->response_content = $content;
-        $offer_model->http_status_code = $http_status_code;
+        $offer_model = $this->getResponseModelFromResponse($response, new Type(AllOfferResponseModel::class));
 
         return $offer_model;
     }
@@ -375,14 +362,8 @@ class TradeOfferService extends ServiceBase
         );
 
         $response = $this->getClient()->post($request);
-        $content = $response->getBody()->getContents();
-        $http_status_code = $response->getStatusCode();
-
         /** @var StandardTradeOfferModel $offer_model */
-        $offer_model = $this->getJSONSerializer()
-            ->deserialize($content, new Type(StandardTradeOfferModel::class));
-        $offer_model->response_content = $content;
-        $offer_model->http_status_code = $http_status_code;
+        $offer_model = $this->getResponseModelFromResponse($response, new Type(StandardTradeOfferModel::class));
 
         return $offer_model;
     }
@@ -420,15 +401,31 @@ class TradeOfferService extends ServiceBase
         );
 
         $response = $this->getClient()->send($request);
-        $content = $response->getBody()->getContents();
-        $http_status_code = $response->getStatusCode();
         /** @var AcceptOfferResponseModel $accept_offer_model */
-        $accept_offer_model = $this->getJSONSerializer()
-            ->deserialize($content, new Type(AcceptOfferResponseModel::class));
-
-        $accept_offer_model->response_content = $content;
-        $accept_offer_model->http_status_code = $http_status_code;
+        $accept_offer_model = $this->getResponseModelFromResponse($response, new Type(AcceptOfferResponseModel::class));
 
         return $accept_offer_model;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @param Type $response_type
+     * @return ResponseBase
+     * @throws \Fabstract\Component\Serializer\Exception\ParseException
+     */
+    protected function getResponseModelFromResponse($response, $response_type)
+    {
+        Assert::isImplements($response, ResponseInterface::class, 'response');
+        Assert::isType($response_type, Type::class, 'response_type');
+
+        $content = $response->getBody()->getContents();
+        $http_status_code = $response->getStatusCode();
+        /** @var ResponseBase $response_model */
+        $response_model = $this->getJSONSerializer()->deserialize($content, $response_type);
+
+        $response_model->response_content = $content;
+        $response_model->http_status_code = $http_status_code;
+
+        return $response_model;
     }
 }
