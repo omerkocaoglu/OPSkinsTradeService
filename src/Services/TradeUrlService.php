@@ -32,7 +32,15 @@ class TradeUrlService extends ServiceBase
      */
     public function isTradeUrlValid($trade_url)
     {
-        return preg_match(RegexPatterns::TRADE_URL, $trade_url) === 1;
+        if (preg_match(RegexPatterns::TRADE_URL_SHORT, $trade_url) === 1) {
+            return true;
+        }
+
+        if (preg_match(RegexPatterns::TRADE_URL_LONG, $trade_url) === 1) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -41,9 +49,28 @@ class TradeUrlService extends ServiceBase
      */
     public function getUidFromTradeUrl($trade_url)
     {
-        preg_match(RegexPatterns::TRADE_URL, $trade_url, $matches_for_uid);
+        preg_match(RegexPatterns::TRADE_URL_SHORT, $trade_url, $matches_for_uid);
         if (count($matches_for_uid) > 0 && $matches_for_uid['uid'] !== null) {
             return $matches_for_uid['uid'];
+        }
+
+        preg_match(RegexPatterns::TRADE_URL_LONG, $trade_url, $matches_for_uid);
+        if (count($matches_for_uid) > 0 && $matches_for_uid['uid'] !== null) {
+            return $matches_for_uid['uid'];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $trade_url
+     * @return string|null
+     */
+    public function getTokenFromTradeUrl($trade_url)
+    {
+        preg_match(RegexPatterns::TRADE_URL_LONG, $trade_url, $matches_for_uid);
+        if (count($matches_for_uid) > 0 && $matches_for_uid['token'] !== null) {
+            return $matches_for_uid['token'];
         }
 
         return null;
