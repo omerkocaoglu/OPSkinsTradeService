@@ -249,9 +249,11 @@ class TradeOfferService extends ServiceBase
             $parameter_list[QueryParameterKeys::MESSAGE] = $this->message;
         }
 
+        $request_url = substr($url, 0, -1);
+
         $request = new Request(
             HttpMethods::POST,
-            substr($url, 0, -1),
+            $request_url,
             [
                 'content-type' => ContentTypes::APPLICATION_JSON
             ],
@@ -260,7 +262,7 @@ class TradeOfferService extends ServiceBase
 
         $response = $this->getClient()->send($request);
         /** @var SendTradeOfferResponseModel $send_trade_offer_response_model */
-        $send_trade_offer_response_model = $this->getResponseModelFromResponse($response, new Type(SendTradeOfferResponseModel::class));
+        $send_trade_offer_response_model = $this->getResponseModelFromResponse($request_url, $response, new Type(SendTradeOfferResponseModel::class));
 
         return $send_trade_offer_response_model;
     }
@@ -283,9 +285,10 @@ class TradeOfferService extends ServiceBase
             $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
         }
 
-        $response = $this->getClient()->get(substr($url, 0, -1));
+        $request_url = substr($url, 0, -1);
+        $response = $this->getClient()->get($request_url);
         /** @var StandardTradeOfferModel $offer_model */
-        $offer_model = $this->getResponseModelFromResponse($response, new Type(StandardTradeOfferModel::class));
+        $offer_model = $this->getResponseModelFromResponse($request_url, $response, new Type(StandardTradeOfferModel::class));
 
         return $offer_model;
     }
@@ -327,9 +330,10 @@ class TradeOfferService extends ServiceBase
             $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
         }
 
-        $response = $this->getClient()->get(substr($url, 0, -1));
+        $request_url = substr($url, 0, -1);
+        $response = $this->getClient()->get($request_url);
         /** @var AllOfferResponseModel $offer_model */
-        $offer_model = $this->getResponseModelFromResponse($response, new Type(AllOfferResponseModel::class));
+        $offer_model = $this->getResponseModelFromResponse($request_url, $response, new Type(AllOfferResponseModel::class));
 
         return $offer_model;
     }
@@ -352,9 +356,11 @@ class TradeOfferService extends ServiceBase
         $parameter_list = [];
         $parameter_list[QueryParameterKeys::OFFER_ID] = $offer_id;
 
+        $request_url = substr($url, 0, -1);
+
         $request = new Request(
             HttpMethods::POST,
-            substr($url, 0, -1),
+            $request_url,
             [
                 'content-type' => ContentTypes::APPLICATION_JSON
             ],
@@ -363,7 +369,7 @@ class TradeOfferService extends ServiceBase
 
         $response = $this->getClient()->post($request);
         /** @var StandardTradeOfferModel $offer_model */
-        $offer_model = $this->getResponseModelFromResponse($response, new Type(StandardTradeOfferModel::class));
+        $offer_model = $this->getResponseModelFromResponse($request_url, $response, new Type(StandardTradeOfferModel::class));
 
         return $offer_model;
     }
@@ -391,9 +397,11 @@ class TradeOfferService extends ServiceBase
         $parameter_list[QueryParameterKeys::OFFER_ID] = $offer_id;
         $parameter_list[QueryParameterKeys::TWO_FACTOR_CODE] = $this->two_fa_code;
 
+        $request_url = substr($url, 0, -1);
+
         $request = new Request(
             HttpMethods::POST,
-            substr($url, 0, -1),
+            $request_url,
             [
                 'content-type' => ContentTypes::APPLICATION_JSON
             ],
@@ -402,19 +410,21 @@ class TradeOfferService extends ServiceBase
 
         $response = $this->getClient()->send($request);
         /** @var AcceptOfferResponseModel $accept_offer_model */
-        $accept_offer_model = $this->getResponseModelFromResponse($response, new Type(AcceptOfferResponseModel::class));
+        $accept_offer_model = $this->getResponseModelFromResponse($request_url, $response, new Type(AcceptOfferResponseModel::class));
 
         return $accept_offer_model;
     }
 
     /**
+     * @param string $request_url
      * @param ResponseInterface $response
      * @param Type $response_type
      * @return ResponseBase
      * @throws \Fabstract\Component\Serializer\Exception\ParseException
      */
-    protected function getResponseModelFromResponse($response, $response_type)
+    protected function getResponseModelFromResponse($request_url, $response, $response_type)
     {
+        Assert::isNotEmptyString($request_url, 'request_url');
         Assert::isImplements($response, ResponseInterface::class, 'response');
         Assert::isType($response_type, Type::class, 'response_type');
 
@@ -423,6 +433,7 @@ class TradeOfferService extends ServiceBase
         /** @var ResponseBase $response_model */
         $response_model = $this->getJSONSerializer()->deserialize($content, $response_type);
 
+        $response_model->request_url = $request_url;
         $response_model->response_content = $content;
         $response_model->http_status_code = $http_status_code;
 
