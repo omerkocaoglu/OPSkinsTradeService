@@ -357,7 +357,7 @@ class TradeOfferService extends ServiceBase
             json_encode($parameter_list)
         );
 
-        $response = $this->getClient()->post($request);
+        $response = $this->getClient()->send($request);
         /** @var StandardTradeOfferModel $offer_model */
         $offer_model = $this->getResponseModelFromResponse($request_url, $response, new Type(StandardTradeOfferModel::class));
 
