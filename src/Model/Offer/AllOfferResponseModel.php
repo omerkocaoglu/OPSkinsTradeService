@@ -2,9 +2,9 @@
 
 namespace OmerKocaoglu\OPSkinsTradeService\Model\Offer;
 
-use Fabstract\Component\Serializer\Normalizer\ArrayType;
 use Fabstract\Component\Serializer\Normalizer\NormalizableInterface;
 use Fabstract\Component\Serializer\Normalizer\NormalizationMetadata;
+use Fabstract\Component\Serializer\Normalizer\Type;
 use OmerKocaoglu\OPSkinsTradeService\Model\ResponseBase;
 
 class AllOfferResponseModel extends ResponseBase implements NormalizableInterface
@@ -26,6 +26,6 @@ class AllOfferResponseModel extends ResponseBase implements NormalizableInterfac
      */
     public function configureNormalizationMetadata($normalization_metadata)
     {
-        $normalization_metadata->registerType('offers', new ArrayType(StandardTradeOfferModel::class));
+        $normalization_metadata->registerType('response', new Type(AllOfferResponseResponseModel::class));
     }
 }
