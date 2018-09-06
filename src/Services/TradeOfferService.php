@@ -319,7 +319,7 @@ class TradeOfferService extends ServiceBase
         }
 
         if (count($this->offer_id_list) > 0) {
-            $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
+            $url .= $this->createQueryString(QueryParameterKeys::IDS, implode(',', $this->offer_id_list));
         }
 
         $request_url = substr($url, 0, -1);
