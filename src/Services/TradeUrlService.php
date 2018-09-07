@@ -81,9 +81,12 @@ class TradeUrlService extends ServiceBase
      */
     public function getTradeUrl()
     {
+        Assert::isNotNull($this->api_key);
+        Assert::isString($this->api_key);
+
         $url = sprintf(
             OPSkinsTradeInterfaces::GET_TRADE_URL,
-            $this->api_key === null ? $this->getServiceConfig()->api_key : $this->api_key);
+            $this->api_key);
 
         $response = $this->getClient()->get(substr($url, 0, -1));
         $http_status_code = $response->getStatusCode();

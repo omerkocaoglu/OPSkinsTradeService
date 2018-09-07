@@ -219,10 +219,12 @@ class TradeOfferService extends ServiceBase
         Assert::isString($this->trade_url);
         Assert::isNotNull($this->trade_url);
         Assert::isNotEmptyArray($this->item_id_list);
+        Assert::isNotNull($this->api_key);
+        Assert::isString($this->api_key);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::SEND_OFFER,
-            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
+            $this->api_key);
 
         /** @var string[] $parameter_list */
         $parameter_list = [];
@@ -268,10 +270,12 @@ class TradeOfferService extends ServiceBase
     public function getOffer($offer_id)
     {
         Assert::isPositive($offer_id);
+        Assert::isNotNull($this->api_key);
+        Assert::isString($this->api_key);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::GET_OFFER,
-            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
+            $this->api_key);
 
         if (count($this->offer_id_list) > 0) {
             $url .= $this->createQueryString(QueryParameterKeys::OFFER_ID, implode(',', $this->offer_id_list));
@@ -290,9 +294,12 @@ class TradeOfferService extends ServiceBase
      */
     public function getOffers()
     {
+        Assert::isNotNull($this->api_key);
+        Assert::isString($this->api_key);
+
         $url = sprintf(
             OPSkinsTradeInterfaces::GET_OFFERS,
-            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
+            $this->api_key);
 
         if ($this->uid !== 0) {
             $url .= $this->createQueryString(QueryParameterKeys::UID, $this->uid);
@@ -337,10 +344,12 @@ class TradeOfferService extends ServiceBase
     public function cancelOffer($offer_id)
     {
         Assert::isPositive($offer_id);
+        Assert::isNotNull($this->api_key);
+        Assert::isString($this->api_key);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::CANCEL_OFFER,
-            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
+            $this->api_key);
 
         /** @var string[] $parameter_list */
         $parameter_list = [];
@@ -373,10 +382,12 @@ class TradeOfferService extends ServiceBase
         Assert::isPositive($offer_id);
         Assert::isString($this->two_fa_code);
         Assert::isNotNull($this->two_fa_code);
+        Assert::isNotNull($this->api_key);
+        Assert::isString($this->api_key);
 
         $url = sprintf(
             OPSkinsTradeInterfaces::ACCEPT_OFFER,
-            $this->api_key !== null ? $this->api_key : $this->getServiceConfig()->api_key);
+            $this->api_key);
 
 
         /** @var string[] $parameter_list */
