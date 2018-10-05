@@ -19,4 +19,6 @@ class QueryParameterKeys
     const PER_PAGE = 'per_page';
     const IDS = 'ids';
     const SORT = 'sort';
+    const ITEMS_TO_SEND = 'items_to_send';
+    const ITEMS_TO_RECEIVE = 'items_to_receive';
 }

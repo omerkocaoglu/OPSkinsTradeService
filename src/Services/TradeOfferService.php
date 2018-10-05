@@ -30,6 +30,10 @@ class TradeOfferService extends ServiceBase
     private $two_fa_code = null;
     /** @var int[] */
     private $item_id_list = [];
+    /** @var int[] */
+    private $items_to_send = [];
+    /** @var int[] */
+    private $items_to_receive = [];
     /** @var int */
     private $page = 0;
     /** @var int */
@@ -89,6 +93,8 @@ class TradeOfferService extends ServiceBase
     }
 
     /**
+     * @deprecated This function has been deprecated and will be completely disabled on October 22nd, 2018
+     * @deprecated Instead of this function you can use 'setItemsToSend' for items which you wish send and items which you wish receive, 'setItemsToReceive' can be used
      * @param int[] $item_id_list
      * @return TradeOfferService
      */
@@ -100,6 +106,36 @@ class TradeOfferService extends ServiceBase
         }
 
         $this->item_id_list = $item_id_list;
+        return $this;
+    }
+
+    /**
+     * @param int[] $item_id_list
+     * @return TradeOfferService
+     */
+    public function setItemsToSend($item_id_list)
+    {
+        Assert::isArray($item_id_list);
+        foreach ($item_id_list as $item_id) {
+            Assert::isInt($item_id);
+        }
+
+        $this->items_to_send = $item_id_list;
+        return $this;
+    }
+
+    /**
+     * @param int[] $item_id_list
+     * @return TradeOfferService
+     */
+    public function setItemsToReceive($item_id_list)
+    {
+        Assert::isArray($item_id_list);
+        foreach ($item_id_list as $item_id) {
+            Assert::isInt($item_id);
+        }
+
+        $this->items_to_receive = $item_id_list;
         return $this;
     }
 
@@ -211,6 +247,8 @@ class TradeOfferService extends ServiceBase
 
     /**
      * @return SendTradeOfferResponseModel
+     * @throws \Fabstract\Component\Serializer\Exception\ParseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function sendOffer()
     {
@@ -241,6 +279,14 @@ class TradeOfferService extends ServiceBase
             $parameter_list[QueryParameterKeys::ITEMS] = implode(',', $this->item_id_list);
         }
 
+        if (count($this->items_to_send) > 0) {
+            $parameter_list[QueryParameterKeys::ITEMS_TO_SEND] = implode(',', $this->items_to_send);
+        }
+
+        if (count($this->items_to_receive) > 0) {
+            $parameter_list[QueryParameterKeys::ITEMS_TO_RECEIVE] = implode(',', $this->items_to_receive);
+        }
+
         if ($this->message !== null) {
             $parameter_list[QueryParameterKeys::MESSAGE] = $this->message;
         }
@@ -266,6 +312,7 @@ class TradeOfferService extends ServiceBase
     /**
      * @param int $offer_id
      * @return StandardTradeOfferModel
+     * @throws \Fabstract\Component\Serializer\Exception\ParseException
      */
     public function getOffer($offer_id)
     {
@@ -291,6 +338,7 @@ class TradeOfferService extends ServiceBase
 
     /**
      * @return AllOfferResponseModel
+     * @throws \Fabstract\Component\Serializer\Exception\ParseException
      */
     public function getOffers()
     {
@@ -340,6 +388,8 @@ class TradeOfferService extends ServiceBase
     /**
      * @param int $offer_id
      * @return StandardTradeOfferModel
+     * @throws \Fabstract\Component\Serializer\Exception\ParseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function cancelOffer($offer_id)
     {
@@ -376,6 +426,7 @@ class TradeOfferService extends ServiceBase
     /**
      * @param int $offer_id
      * @return AcceptOfferResponseModel
+     * @throws \Fabstract\Component\Serializer\Exception\ParseException
      */
     public function acceptOffer($offer_id)
     {

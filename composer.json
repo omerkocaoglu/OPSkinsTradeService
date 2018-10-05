@@ -17,5 +17,6 @@
     "fabs/serialize": "dev-develop",
     "guzzlehttp/guzzle": "^6.3",
     "fabstract/serializer": "^0.2.2"
-  }
+  },
+  "description": ""
 }
